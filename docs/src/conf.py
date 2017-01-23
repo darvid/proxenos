@@ -16,7 +16,7 @@ extensions = [
     'sphinxcontrib.napoleon',
     'sphinxcontrib.bibtex',
 ]
-html_static_path = ['_static']
+html_static_path = []
 html_theme = 'material_design'
 html_theme_options = {'pygments_theme': 'lovelace'}
 intersphinx_mapping = {
