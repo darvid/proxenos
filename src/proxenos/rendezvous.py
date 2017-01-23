@@ -117,7 +117,7 @@ def srand(seed=0):
     # type: (KeyType) -> typing.Generator[int, None, None]
     if isinstance(seed, six.string_types) or isinstance(seed, bytes):
         if isinstance(seed, six.text_type):
-            seed = seed.encode()
+            seed = seed.encode('utf-8')
         seed_int = int(hashlib.sha512(seed).hexdigest(), 16)
         seed = typing.cast(int, seed_int)
     rng = random.Random(seed)
