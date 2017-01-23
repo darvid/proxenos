@@ -30,7 +30,7 @@ def test_srand_bytes():
 
 def test_srand_unicode():
     s = six.text_type(u'touché')
-    int_value = int(hashlib.sha512(s.encode()).hexdigest(), 16)
+    int_value = int(hashlib.sha512(s.encode('utf-8')).hexdigest(), 16)
     rng = random.Random()
     rng.seed(int_value)
     assert next(proxenos.rendezvous.srand(s)) == rng.randint(0, sys.maxsize)
