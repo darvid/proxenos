@@ -1,7 +1,6 @@
 # coding: utf-8
 from __future__ import absolute_import
 
-import codecs
 import hashlib
 import random
 import sys
@@ -23,16 +22,15 @@ def test_srand():
 
 def test_srand_bytes():
     bs = b'\x00\x00\x00\x00'
-    int_value = int(codecs.encode(hashlib.sha512(bs).digest(), 'hex'), 16)
+    int_value = int(hashlib.sha512(bs).hexdigest(), 16)
     rng = random.Random()
     rng.seed(int_value)
     assert next(proxenos.rendezvous.srand(bs)) == rng.randint(0, sys.maxsize)
 
 
 def test_srand_unicode():
-    s = six.text_type('touché')
-    int_value = int(codecs.encode(hashlib.sha512(
-        s.encode()).digest(), 'hex'), 16)
+    s = six.text_type(u'touché')
+    int_value = int(hashlib.sha512(s.encode()).hexdigest(), 16)
     rng = random.Random()
     rng.seed(int_value)
     assert next(proxenos.rendezvous.srand(s)) == rng.randint(0, sys.maxsize)
