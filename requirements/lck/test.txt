@@ -1,0 +1,23 @@
+# -*- mode: requirementstxt -*-
+# vim: set ft=requirements
+attrs==16.3.0
+consulate==0.6.0
+cookies==2.2.1            # via responses
+coverage==4.3.4           # via pytest-cov
+enum34==1.1.6
+funcsigs==1.0.2           # via mock
+future==0.16.0
+mmh3==2.3.1
+mock==2.0.0               # via pytest-mock, responses
+netaddr==0.7.19
+pathlib2==2.1.0
+pbr==1.10.0               # via mock, stevedore
+py==1.4.32                # via pytest
+pytest-cov==2.4.0
+pytest-mock==1.5.0
+pytest==3.0.5             # via pytest-cov, pytest-mock
+requests==2.12.5          # via consulate, responses
+responses==0.5.1
+six==1.10.0               # via mock, pathlib2, responses, stevedore
+stevedore==1.20.0
+typing==3.5.2.2
