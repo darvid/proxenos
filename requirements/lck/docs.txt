@@ -1,8 +1,10 @@
 # -*- mode: requirementstxt -*-
 # vim: set ft=requirements
 alabaster==0.7.9          # via sphinx
+attrdict==2.0.0           # via biome
 attrs==16.3.0
 babel==2.3.4              # via sphinx
+biome==0.1.3
 consulate==0.6.0
 docutils==0.13.1          # via pybtex-docutils, sphinx
 enum34==1.1.6
@@ -13,19 +15,19 @@ MarkupSafe==0.23          # via jinja2
 mmh3==2.3.1
 netaddr==0.7.19
 oset==0.1.3               # via sphinxcontrib-bibtex
-pathlib2==2.1.0
+pathlib==1.0.1            # via biome
 pbr==1.10.0               # via stevedore
 pockets==0.3.1            # via sphinxcontrib-napoleon
 pybtex-docutils==0.2.1    # via sphinxcontrib-bibtex
 pybtex==0.21              # via pybtex-docutils, sphinxcontrib-bibtex
-Pygments==2.1.3           # via sphinx
+Pygments==2.2.0           # via sphinx
 pytz==2016.10             # via babel
 PyYAML==3.12              # via pybtex
 requests==2.12.5          # via consulate, sphinx
-six==1.10.0               # via latexcodec, pathlib2, pockets, pybtex-docutils, sphinx, sphinxcontrib-bibtex, sphinxcontrib-napoleon, stevedore
+six==1.10.0               # via attrdict, latexcodec, pockets, pybtex-docutils, sphinx, sphinxcontrib-bibtex, sphinxcontrib-napoleon, stevedore
 snowballstemmer==1.2.1    # via sphinx
 sphinx-md-theme==0.1a4
-Sphinx==1.5.1             # via sphinxcontrib-bibtex
+Sphinx==1.5.2             # via sphinxcontrib-bibtex
 sphinxcontrib-bibtex==0.3.4
 sphinxcontrib-napoleon==0.6.0
 stevedore==1.20.0
