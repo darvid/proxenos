@@ -26,5 +26,9 @@ class ConsulClusterMapper(proxenos.mappers.base.BaseClusterMapper):
                          for service in dc]
         for service in service_names:
             for node in self._conn.catalog.service(service):
-                self.cluster.add(proxenos.node.SocketAddress(
-                    node['ServiceAddress'], node['ServicePort']))
+                socket_address = proxenos.node.SocketAddress(
+                    node['ServiceAddress'], node['ServicePort'])
+                self.cluster.add(proxenos.node.Service(
+                    name=node['ServiceName'],
+                    socket_address=socket_address,
+                    tags=node['ServiceTags']))

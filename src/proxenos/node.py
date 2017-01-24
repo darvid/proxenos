@@ -10,7 +10,7 @@ import netaddr
 import netaddr.strategy.ipv6
 
 
-__all__ = ('SocketAddress',)
+__all__ = ('Service', 'SocketAddress')
 
 
 def ipv6_address(addr, resolve=True):
@@ -81,3 +81,14 @@ class SocketAddress(object):
             return '{}:{}'.format(self.host.ipv4(), self.port)
         except netaddr.AddrConversionError:
             return '{}:{}'.format(self.host, self.port)
+
+
+@attr.s(frozen=True, slots=True)
+class Service(object):
+    """Represents a named service."""
+
+    name = attr.ib(convert=str)        # type: str
+    socket_address = attr.ib(
+        validator=attr.validators.instance_of(SocketAddress),
+    )                                  # type: SocketAddress
+    tags = attr.ib(convert=frozenset)  # type: Set[str]

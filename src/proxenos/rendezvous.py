@@ -125,17 +125,17 @@ def srand(seed=0):
         yield rng.randint(0, sys.maxsize)
 
 
-def select_node(cluster,       # type: typing.Set[proxenos.node.SocketAddress]
+def select_node(cluster,       # type: typing.Set[proxenos.node.Service]
                 key,           # type: typing.Any
                 hash_method=None,  # type: typing.Optional[HashMethod]
                 **hash_options     # type: typing.Any
                 ):
-    # type: (...) -> proxenos.node.SocketAddress
+    # type: (...) -> proxenos.node.Service
     """Selects a node from the given cluster based using HRW hashing.
 
     Args:
-        cluster (set of :class:`proxenos.node.SocketAddress`): A set of
-            cluster nodes (:class:`~.node.SocketAddress` instances).
+        cluster (set of :class:`proxenos.node.Service`): A set of
+            service nodes.
         key (str or int): An arbitrary hashable object, typically a
             string or integer.
         hash_method (:class:`HashMethod`): The pseudorandom function
@@ -145,7 +145,7 @@ def select_node(cluster,       # type: typing.Set[proxenos.node.SocketAddress]
             function, such as seed, salt, or key length.
 
     Returns:
-        The :class:`SocketAddress` of the selected node.
+        The selected :class:`Service` instance.
 
     """
     if hash_method is None:
@@ -155,7 +155,11 @@ def select_node(cluster,       # type: typing.Set[proxenos.node.SocketAddress]
     max_weight = 0
     selected_node = None
     for node in cluster:
-        node_weight = weight(node, key, hash_method, **hash_options)
+        node_weight = weight(
+            socket_address=node.socket_address,
+            key=key,
+            hash_method=hash_method,
+            **hash_options)
         if node_weight > max_weight:
             max_weight = node_weight
             selected_node = node

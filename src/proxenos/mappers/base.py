@@ -1,10 +1,10 @@
 """Provides a base interface for node cluster data mappers.
 
-Node clusters, or a set of :class:`~.node.SocketAddress`, to be
-specific, are a pool of socket addresses representing remote services.
-Cluster mappers implement the data mapper pattern, reading service
-socket addresses from sources such as service discovery tools (i.e.
-Consul, etcd, or ZooKeeper) into a set of :class:`~.node.SocketAddress`.
+Node clusters, or a set of :class:`~.node.Service`, to be specific, are
+a pool of socket addresses representing remote services. Cluster mappers
+implement the data mapper pattern, reading service socket addresses from
+sources such as service discovery tools (i.e. Consul, etcd, or
+ZooKeeper) into a set of :class:`~.node.Service`.
 
 .. note::
 
@@ -29,14 +29,14 @@ __all__ = ('BaseClusterMapper',)
 @attr.s
 @six.add_metaclass(abc.ABCMeta)
 class BaseClusterMapper(object):
-    """Serializes services into a set of :class:`~.node.SocketAddress`."""
+    """Serializes services into a set of :class:`~.node.Service`."""
 
     host = attr.ib()             # type: str
     port = attr.ib(convert=int)  # type: int
     cluster = attr.ib(
         default=attr.Factory(set),
         convert=set,
-        repr=False)  # type: typing.Set[proxenos.node.SocketAddress]
+        repr=False)  # type: typing.Set[proxenos.node.Service]
     _conn = attr.ib(
         default=attr.NOTHING,
         repr=False,
@@ -61,7 +61,7 @@ class BaseClusterMapper(object):
                hash_method,    # type: proxenos.rendezvous.HashMethod
                **hash_options  # type: typing.Any
                ):
-        # type: (...) -> proxenos.node.SocketAddress
+        # type: (...) -> proxenos.node.Service
         """Selects a node from the cluster based using HRW hashing.
 
         Args:
@@ -74,7 +74,7 @@ class BaseClusterMapper(object):
                 function, such as seed, salt, or key length.
 
         Returns:
-            The :class:`SocketAddress` of the selected node.
+            The :class:`Service` of the selected node.
 
         """
         return proxenos.rendezvous.select_node(self.cluster, key)
