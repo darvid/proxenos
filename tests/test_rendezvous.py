@@ -6,7 +6,9 @@ import random
 import sys
 
 import six
+import siphash
 
+import proxenos.config
 import proxenos.node
 import proxenos.rendezvous
 
@@ -34,3 +36,15 @@ def test_srand_unicode():
     rng = random.Random()
     rng.seed(int_value)
     assert next(proxenos.rendezvous.srand(s)) == rng.randint(0, sys.maxsize)
+
+
+def test_hashex():
+    for algorithm in hashlib.algorithms_guaranteed:
+        method = getattr(proxenos.rendezvous.HashMethod, algorithm.upper())
+        assert (proxenos.rendezvous.hashex(method, 'secret') ==
+                int(hashlib.new(algorithm, b'secret').hexdigest(), 16))
+
+    key = proxenos.config.siphash_key
+    assert proxenos.rendezvous.hashex(
+        proxenos.rendezvous.HashMethod.SIPHASH,
+        'secret') == int(siphash.SipHash24(key, b'secret').hexdigest(), 16)

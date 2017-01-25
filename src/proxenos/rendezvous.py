@@ -66,6 +66,8 @@ def hashex(method,    # type: HashMethod
            **options  # type: typing.Any
            ):
     # type: (...) -> int
+    if isinstance(key, six.text_type):
+        key = key.encode('utf-8')
     if method.name.lower() in hashlib.algorithms_guaranteed:
         return int(hashlib.new(method.name.lower(), key).hexdigest(), 16)
     elif method == HashMethod.MMH3_32:
