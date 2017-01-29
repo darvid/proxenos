@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import pkg_resources
 
 
-try:  # pragma: no cover
+try:
     __version__ = pkg_resources.get_distribution(__name__).version
-except:  # noqa: B901
+except pkg_resources.DistributionNotFound:  # pragma: no cover
     __version__ = 'unknown'

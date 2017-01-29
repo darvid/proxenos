@@ -2,7 +2,9 @@
 from __future__ import absolute_import
 
 import consulate
+import requests.exceptions
 
+import proxenos.errors
 import proxenos.mappers.base
 import proxenos.node
 
@@ -15,8 +17,22 @@ class ConsulClusterMapper(proxenos.mappers.base.BaseClusterMapper):
 
     def make_connection(self):
         # type: () -> consulate.Consul
-        """Initializes a Consul connection with :mod:`consulate`."""
-        return consulate.Consul(host=self.host, port=self.port)
+        """Initializes a Consul connection with :mod:`consulate`.
+
+        Raises:
+            :class:`~.errors.ServiceDiscoveryConnectionError`: Unable to
+                connect to a Consul agent.
+
+        Returns:
+            :class:`consulate.Consul`: A Consul agent connection.
+
+        """
+        try:
+            conn = consulate.Consul(host=self.host, port=self.port)
+            conn.status.leader()
+            return conn
+        except requests.exceptions.RequestException as err:
+            raise proxenos.errors.ServiceDiscoveryConnectionError(str(err))
 
     def update(self):
         # type: () -> None

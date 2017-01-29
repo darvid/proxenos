@@ -20,7 +20,7 @@ import attr
 import six
 
 import proxenos.node  # noqa: F401
-import proxenos.rendezvous
+from proxenos.rendezvous import HashMethod, KeyType, select_node  # noqa: F401
 
 
 __all__ = ('BaseClusterMapper',)
@@ -57,9 +57,9 @@ class BaseClusterMapper(object):
         """Reads all service nodes into the socket address cluster."""
 
     def select(self,
-               key,            # type: proxenos.rendezvous.KeyType
-               hash_method,    # type: proxenos.rendezvous.HashMethod
-               **hash_options  # type: typing.Any
+               key,               # type: KeyType
+               hash_method=None,  # type: typing.Optional[HashMethod]
+               **hash_options     # type: typing.Any
                ):
         # type: (...) -> proxenos.node.Service
         """Selects a node from the cluster based using HRW hashing.
@@ -77,4 +77,5 @@ class BaseClusterMapper(object):
             The :class:`Service` of the selected node.
 
         """
-        return proxenos.rendezvous.select_node(self.cluster, key)
+        return select_node(
+            self.cluster, key, hash_method=hash_method, **hash_options)

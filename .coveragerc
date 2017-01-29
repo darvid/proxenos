@@ -2,3 +2,5 @@
 # vim: set ft=ini
 [run]
 source = src/proxenos
+omit =
+  */__main__.py

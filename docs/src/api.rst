@@ -11,6 +11,17 @@ proxenos.cli
 .. automodule:: proxenos.cli
    :members:
 
+proxenos.const
+==============
+.. automodule:: proxenos.const
+   :members:
+
+proxenos.errors
+===============
+
+.. automodule:: proxenos.errors
+   :members:
+
 proxenos.mappers
 ================
 

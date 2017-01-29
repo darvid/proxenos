@@ -17,7 +17,7 @@ import proxenos.node  # noqa: F401
 
 try:
     import mmh3  # type: ignore
-except ImportError:
+except ImportError:  # pragma: no cover
     err = RuntimeError('Please install the mmh3 package from PyPI '
                        'for Murmur3 support')
 
@@ -90,14 +90,14 @@ def hash_murmur3(key,            # type: KeyType
         raise ValueError('size must be one of (32, 64, 128)')
     hash_fn = getattr(mmh3, 'hash{}'.format('' if size == 32 else size))
     options = {}
-    if optimize is None:
-        optimize = proxenos.config.mmh_optimize
-    else:
-        optimize = optimize.lower()
     if seed is None:
         seed = proxenos.config.mmh_seed
     options['seed'] = seed
     if size != 32:
+        if optimize is None:
+            optimize = proxenos.config.mmh_optimize
+        else:
+            optimize = optimize.lower()
         options['x64arch'] = False
         if optimize == 'x64':
             options['x64arch'] = True
@@ -127,8 +127,8 @@ def srand(seed=0):
         yield rng.randint(0, sys.maxsize)
 
 
-def select_node(cluster,       # type: typing.Set[proxenos.node.Service]
-                key,           # type: typing.Any
+def select_node(cluster,           # type: typing.Set[proxenos.node.Service]
+                key,               # type: typing.Any
                 hash_method=None,  # type: typing.Optional[HashMethod]
                 **hash_options     # type: typing.Any
                 ):

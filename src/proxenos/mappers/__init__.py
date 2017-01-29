@@ -5,11 +5,15 @@ import pkg_resources
 
 
 __all__ = (
-    'available_backends',
+    'get_available_backends',
     'NAMESPACE',
 )
 
 
 NAMESPACE = 'proxenos.mapper'
-available_backends = (
-    ep.name for ep in pkg_resources.iter_entry_points(NAMESPACE))
+
+
+def get_available_backends():
+    # type: () -> Set[str]
+    """Returns the names of available service discovery data mappers."""
+    return {ep.name for ep in pkg_resources.iter_entry_points(NAMESPACE)}

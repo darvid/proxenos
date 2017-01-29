@@ -6,6 +6,8 @@ import re
 import click
 import stevedore.driver
 
+import proxenos.const
+import proxenos.errors
 import proxenos.mappers
 import proxenos.rendezvous
 
@@ -32,12 +34,16 @@ def main(ctx):
 @click.option('-b', '--backend',
               default='consul',
               help='Service discovery backend.',
-              type=click.Choice(proxenos.mappers.available_backends))
-@click.option('-f', '--filter-pattern',
-              help='Regex pattern to filter socket address strings.')
+              type=click.Choice(proxenos.mappers.get_available_backends()))
 @click.option('-h', '--host', default='localhost',
               help='Service discovery host.')
 @click.option('-p', '--port', help='Service discovery port.')
+@click.option('-A', '--filter-address',
+              help='Filters service addresses by provided regular expression.')
+@click.option('-N', '--filter-service-name',
+              help='Filters service names by provided regular expression.')
+@click.option('-T', '--filter-service-tags',
+              help='Filters service tags by provided regular expression.')
 @click.option('-H', '--hash-method',
               callback=(lambda _, __, v:
                         getattr(proxenos.rendezvous.HashMethod, v.upper())),
@@ -46,12 +52,16 @@ def main(ctx):
               help='Hash method. Defaults to SipHash.',
               type=click.Choice(HASH_METHODS))
 @click.argument('key')
-def cmd_select(backend,         # type: str
-               filter_pattern,  # type: str
-               host,            # type: str
-               port,            # type: int
-               hash_method,     # type: proxenos.rendezvous.HashMethod
-               key,             # type: str
+@click.pass_context
+def cmd_select(ctx,                  # type: click.Context
+               backend,              # type: str
+               host,                 # type: str
+               port,                 # type: int
+               filter_address,       # type: str
+               filter_service_name,  # type: str
+               filter_service_tags,  # type: str
+               hash_method,          # type: proxenos.rendezvous.HashMethod
+               key,                  # type: str
                ):
     # type: (...) -> None
     """Selects a node from a cluster."""
@@ -61,13 +71,28 @@ def cmd_select(backend,         # type: str
         namespace=proxenos.mappers.NAMESPACE,
         name=backend,
         invoke_on_load=False)
-    mapper = driver_manager.driver(host=host, port=port)
+    try:
+        mapper = driver_manager.driver(host=host, port=port)
+    except proxenos.errors.ServiceDiscoveryConnectionError as err:
+        click.secho(str(err), fg='red')
+        ctx.exit(proxenos.const.ExitCode.CONNECTION_FAILURE)
     mapper.update()
     cluster = mapper.cluster.copy()
     # TODO(darvid): Add filtering support in the mapper API itself
-    if filter_pattern:
-        pattern = re.compile(filter_pattern)
-        cluster = {addr for addr in cluster if pattern.match(str(addr))}
-    addr = proxenos.rendezvous.select_node(
+    if filter_service_tags:
+        pattern = re.compile(filter_service_tags)
+        cluster = {service for service in cluster
+                   if all(pattern.match(tag) for tag in service.tags)}
+    if filter_service_name:
+        pattern = re.compile(filter_service_name)
+        cluster = {service for service in cluster
+                   if pattern.match(service.name)}
+    if filter_address:
+        pattern = re.compile(filter_address)
+        cluster = {service for service in cluster
+                   if pattern.match(str(service.socket_address))}
+    service = proxenos.rendezvous.select_node(
         cluster, key, hash_method=hash_method)
-    click.echo(str(addr))
+    if service is None:
+        ctx.exit(proxenos.const.ExitCode.SERVICES_NOT_FOUND)
+    click.echo(str(service.socket_address))
