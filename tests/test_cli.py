@@ -1,3 +1,4 @@
+# coding: utf-8
 import click.testing
 import consulate
 import pytest
