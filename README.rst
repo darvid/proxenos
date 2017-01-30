@@ -56,9 +56,23 @@ Installation
 
 .. code-block:: shell
 
-   $ pip install proxenos
+   $ pip install proxenos[consul]
    $ # If you'd like Murmur3 support, use:
-   $ pip install proxenos[murmur]
+   $ pip install proxenos[consul,murmur]
+
+Configuration
+=============
+
+Proxenos can be configured through environment variables.
+
+* **PROXENOS_MMH_SEED** (int): The seed used for MurMur3 hashes.
+* **PROXENOS_MMH_OPTIMIZE** (str): Set to ``x64`` or ``auto``.
+* **PROXENOS_PRF** (str): The default hashing method to use. Defaults to
+  ``siphash``. Can be set to one of ``md5``, ``sha1``, ``sha224``,
+  ``sha256``, ``sha384``, ``sha512``, ``mmh_32``, ``mmh_64``,
+  ``mmh_128``, or ``siphash``.
+* **PROXENOS_SIPHASH_KEY** (str): The 128-bit SipHash key. A default
+  key is provided, but users are advised to generate their own.
 
 Notes
 =====
