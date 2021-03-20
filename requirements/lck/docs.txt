@@ -27,7 +27,7 @@ Pygments==2.2.0           # via sphinx
 pyparsing==2.1.10         # via packaging
 pytz==2016.10             # via babel
 PyYAML==3.12              # via pybtex
-requests==2.13.0          # via consulate, sphinx
+requests==2.20.0          # via consulate, sphinx
 six==1.10.0               # via attrdict, latexcodec, packaging, pockets, pybtex-docutils, setuptools, sphinx, sphinxcontrib-bibtex, sphinxcontrib-napoleon, stevedore
 snowballstemmer==1.2.1    # via sphinx
 sphinx-md-theme==0.1a4

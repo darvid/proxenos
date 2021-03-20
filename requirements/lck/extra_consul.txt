@@ -1,4 +1,4 @@
 # -*- mode: requirementstxt -*-
 # vim: set ft=requirements
 consulate==0.6.0
-requests==2.13.0          # via consulate
+requests==2.20.0          # via consulate
