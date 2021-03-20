@@ -11,7 +11,7 @@ consulate==0.6.0
 docutils==0.13.1          # via pybtex-docutils, sphinx
 enum34==1.1.6
 imagesize==0.7.1          # via sphinx
-Jinja2==2.9.5             # via sphinx
+Jinja2==2.11.3             # via sphinx
 latexcodec==1.0.4         # via pybtex, sphinxcontrib-bibtex
 MarkupSafe==0.23          # via jinja2
 mmh3==2.3.1
