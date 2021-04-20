@@ -17,7 +17,7 @@ netaddr==0.7.19
 packaging==16.8           # via setuptools
 pathlib==1.0.1            # via biome
 pbr==1.10.0               # via mock, stevedore
-py==1.4.32                # via pytest
+py==1.10.0                # via pytest
 pyparsing==2.1.10         # via packaging
 pytest-cov==2.4.0
 pytest-mock==1.5.0
